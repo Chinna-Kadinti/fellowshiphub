@@ -1,0 +1,19 @@
+{
+  "name": "FellowshipHub",
+  "short_name": "FellowshipHub",
+  "description": "Bible study fellowship coordination for meetings, prayer, resources, and reading plans.",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f6f0e6",
+  "theme_color": "#1f7369",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

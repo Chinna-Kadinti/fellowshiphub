@@ -1,0 +1,285 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  MEMBER
+}
+
+enum MeetingStatus {
+  DRAFT
+  PUBLISHED
+  COMPLETED
+  CANCELLED
+}
+
+enum RSVPStatus {
+  ATTENDING
+  MAYBE
+  NOT_ATTENDING
+}
+
+enum ArrivalStatus {
+  NOT_STARTED
+  ON_THE_WAY
+  REACHED
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  EXCUSED
+}
+
+enum AnnouncementPriority {
+  NORMAL
+  IMPORTANT
+  URGENT
+}
+
+enum ResourceType {
+  PDF
+  VIDEO
+  AUDIO
+  NOTES
+  LINK
+  PRESENTATION
+}
+
+enum PrayerCategory {
+  HEALTH
+  FAMILY
+  EDUCATION
+  JOB
+  MINISTRY
+  THANKSGIVING
+  OTHER
+}
+
+enum PrayerVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum PrayerStatus {
+  ACTIVE
+  ANSWERED
+  ARCHIVED
+}
+
+enum VolunteerRole {
+  SPEAKER
+  WORSHIP_LEADER
+  OPENING_PRAYER
+  CLOSING_PRAYER
+  HOSPITALITY
+  SETUP
+  REFRESHMENTS
+  PHOTOGRAPHY
+  CHILDREN_MINISTRY
+}
+
+model User {
+  id                       String                    @id @default(cuid())
+  email                    String                    @unique
+  passwordHash             String
+  name                     String
+  role                     UserRole                  @default(MEMBER)
+  phone                    String?
+  area                     String?
+  phoneVisible             Boolean                   @default(false)
+  joinedAt                 DateTime                  @default(now())
+  createdAt                DateTime                  @default(now())
+  updatedAt                DateTime                  @updatedAt
+  groupId                  String?
+  group                    Group?                    @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  announcementsCreated     Announcement[]
+  rsvps                    RSVP[]
+  attendance               Attendance[]
+  studyResourcesCreated    StudyResource[]
+  prayerRequests           PrayerRequest[]
+  prayerInteractions       PrayerInteraction[]
+  discussionMessages       DiscussionMessage[]
+  readingCompletions       BibleReadingCompletion[]
+  volunteerAssignments     VolunteerAssignment[]
+}
+
+model Group {
+  id          String    @id @default(cuid())
+  name        String
+  description String?
+  createdAt   DateTime  @default(now())
+  users       User[]
+  meetings    Meeting[]
+}
+
+model Meeting {
+  id                   String                @id @default(cuid())
+  groupId              String?
+  group                Group?                @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  title                String
+  description          String
+  date                 DateTime
+  startTime            String
+  endTime              String
+  venueName            String
+  address              String
+  latitude             Float?
+  longitude            Float?
+  speakerName          String
+  worshipLeaderName    String
+  biblePassage         String
+  studyTopic           String
+  discussionQuestions  String
+  status               MeetingStatus         @default(DRAFT)
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  rsvps                RSVP[]
+  attendance           Attendance[]
+  resources            StudyResource[]
+  volunteerAssignments VolunteerAssignment[]
+}
+
+model RSVP {
+  id            String        @id @default(cuid())
+  meetingId     String
+  userId        String
+  status        RSVPStatus
+  arrivalStatus ArrivalStatus @default(NOT_STARTED)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  meeting       Meeting       @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([meetingId, userId])
+}
+
+model Attendance {
+  id          String           @id @default(cuid())
+  meetingId   String
+  userId      String
+  status      AttendanceStatus @default(PRESENT)
+  checkInTime DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  meeting     Meeting          @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([meetingId, userId])
+}
+
+model Announcement {
+  id          String               @id @default(cuid())
+  title       String
+  body        String
+  priority    AnnouncementPriority @default(NORMAL)
+  pinned      Boolean              @default(false)
+  createdById String
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  createdBy   User                 @relation(fields: [createdById], references: [id], onDelete: Cascade)
+}
+
+model StudyResource {
+  id          String       @id @default(cuid())
+  title       String
+  description String
+  type        ResourceType
+  url         String?
+  bibleTopic  String
+  meetingId   String?
+  createdById String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  meeting     Meeting?     @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+  createdBy   User         @relation(fields: [createdById], references: [id], onDelete: Cascade)
+}
+
+model PrayerRequest {
+  id           String                @id @default(cuid())
+  title        String
+  description  String
+  category     PrayerCategory
+  visibility   PrayerVisibility      @default(PUBLIC)
+  status       PrayerStatus          @default(ACTIVE)
+  createdById  String
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+  createdBy    User                  @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  interactions PrayerInteraction[]
+}
+
+model PrayerInteraction {
+  id              String        @id @default(cuid())
+  prayerRequestId String
+  userId          String
+  createdAt       DateTime      @default(now())
+  prayerRequest   PrayerRequest @relation(fields: [prayerRequestId], references: [id], onDelete: Cascade)
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([prayerRequestId, userId])
+}
+
+model DiscussionChannel {
+  id          String              @id @default(cuid())
+  name        String              @unique
+  description String?
+  createdAt   DateTime            @default(now())
+  messages    DiscussionMessage[]
+}
+
+model DiscussionMessage {
+  id        String            @id @default(cuid())
+  channelId String
+  authorId  String
+  content   String
+  createdAt DateTime          @default(now())
+  channel   DiscussionChannel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  author    User              @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model BibleReadingPlan {
+  id          String                    @id @default(cuid())
+  date        DateTime
+  passage     String
+  description String
+  createdAt   DateTime                  @default(now())
+  completions BibleReadingCompletion[]
+}
+
+model BibleReadingCompletion {
+  id        String           @id @default(cuid())
+  planId    String
+  userId    String
+  createdAt DateTime         @default(now())
+  plan      BibleReadingPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([planId, userId])
+}
+
+model DailyVerse {
+  id        String   @id @default(cuid())
+  reference String
+  text      String
+  createdAt DateTime @default(now())
+}
+
+model VolunteerAssignment {
+  id        String        @id @default(cuid())
+  meetingId String
+  userId    String?
+  role      VolunteerRole
+  notes     String?
+  createdAt DateTime      @default(now())
+  meeting   Meeting       @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  user      User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@unique([meetingId, role])
+}
