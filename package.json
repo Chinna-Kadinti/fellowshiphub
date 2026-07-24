@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build && opennextjs-cloudflare build --skipBuild && node -e \"require('fs').cpSync('.open-next','dist',{recursive:true})\"",
+    "build": "prisma generate && next build && opennextjs-cloudflare build --skipBuild && node scripts/package-sites.mjs",
     "start": "next start",
     "lint": "next lint",
     "mobile:install": "npm --prefix mobile install",
