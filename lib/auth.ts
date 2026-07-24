@@ -7,7 +7,11 @@ const COOKIE_NAME = "fellowshiphub_session";
 const encoder = new TextEncoder();
 
 function secret() {
-  return encoder.encode(process.env.JWT_SECRET || "dev-only-fellowshiphub-secret");
+  const configuredSecret = process.env.JWT_SECRET;
+  if (!configuredSecret && process.env.NODE_ENV === "production") {
+    throw new Error("JWT_SECRET is required in production.");
+  }
+  return encoder.encode(configuredSecret || "dev-only-fellowshiphub-secret");
 }
 
 export type SessionUser = {

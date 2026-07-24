@@ -1,0 +1,13 @@
+/mobile
+build
+dist
+out
+.next
+.env*
+*.log
+*.err
+*.out
+*.tsbuildinfo
+coverage
+playwright-report
+test-results

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="FellowshipHub icon">
+  <rect width="512" height="512" rx="96" fill="#1f7369"/>
+  <path d="M143 128h145c45 0 81 36 81 81v175H224c-45 0-81-36-81-81V128Z" fill="#fff7e8"/>
+  <path d="M224 128h145v175c0 45-36 81-81 81h-64V128Z" fill="#ead18a"/>
+  <path d="M256 172v164" stroke="#1f7369" stroke-width="24" stroke-linecap="round"/>
+  <path d="M204 224h104" stroke="#1f7369" stroke-width="24" stroke-linecap="round"/>
+  <circle cx="164" cy="372" r="22" fill="#a33d66"/>
+  <circle cx="348" cy="372" r="22" fill="#a33d66"/>
+</svg>

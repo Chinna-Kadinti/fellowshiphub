@@ -3,6 +3,7 @@ node_modules/
 
 # next.js
 .next/
+.next-stale-*/
 out/
 
 # production
@@ -18,6 +19,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+*.log
+*.err
+*.out
+*.tsbuildinfo
 
 # prisma/dev artifacts
 prisma/dev.db
@@ -31,3 +36,7 @@ Thumbs.db
 
 # docker/local
 *.pid
+.vercel
+.agents/
+skills-lock.json
+.env*

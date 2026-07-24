@@ -3,12 +3,20 @@ import { PwaRegister } from "@/components/pwa-register";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "FellowshipHub",
-  description: "Bible study fellowship coordination for meetings, prayer, resources, and reading plans.",
+  title: "EGF Connect",
+  description: "Gather • Grow • Go — fellowship, spiritual growth, and Gospel mission.",
   manifest: "/manifest.webmanifest",
+  icons: {
+    icon: "/egf-connect.png",
+    shortcut: "/egf-connect.png",
+    apple: "/egf-connect.png"
+  },
   appleWebApp: {
     capable: true,
-    title: "FellowshipHub"
+    title: "EGF Connect"
+  },
+  other: {
+    "mobile-web-app-capable": "yes"
   }
 };
 

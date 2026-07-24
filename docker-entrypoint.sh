@@ -2,5 +2,9 @@
 set -e
 
 npx prisma migrate deploy
-npx prisma db seed
-node .next/standalone/server.js
+
+if [ "${SEED_DATABASE:-false}" = "true" ]; then
+  npx prisma db seed
+fi
+
+exec node server.js

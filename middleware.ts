@@ -24,12 +24,6 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if ((request.nextUrl.pathname === "/login" || request.nextUrl.pathname === "/register") && hasCookie) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
-    return NextResponse.redirect(url);
-  }
-
   return NextResponse.next();
 }
 

@@ -1,0 +1,23 @@
+{
+  "name": "EGF Connect",
+  "short_name": "EGF Connect",
+  "description": "Gather • Grow • Go — fellowship, spiritual growth, and Gospel mission.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f4f8f6",
+  "theme_color": "#1f7369",
+  "orientation": "portrait-primary",
+  "lang": "en",
+  "categories": ["social", "lifestyle"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/egf-connect.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

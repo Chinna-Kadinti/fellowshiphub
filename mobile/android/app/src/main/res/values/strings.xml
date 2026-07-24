@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">EGF Connect</string>
+    <string name="title_activity_main">EGF Connect</string>
+    <string name="package_name">com.fellowshiphub.app</string>
+    <string name="custom_url_scheme">com.fellowshiphub.app</string>
+</resources>

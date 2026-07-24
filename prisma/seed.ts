@@ -3,6 +3,24 @@ import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
+const seedPassword = (name: "SEED_ADMIN_PASSWORD" | "SEED_MEMBER_PASSWORD", localDefault: string) => {
+  const value = process.env[name]?.trim();
+
+  if (value) {
+    if (value.length < 12) {
+      throw new Error(`${name} must contain at least 12 characters.`);
+    }
+
+    return value;
+  }
+
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(`${name} is required when seeding a production database.`);
+  }
+
+  return localDefault;
+};
+
 const addDays = (days: number) => {
   const date = new Date();
   date.setHours(0, 0, 0, 0);
@@ -11,19 +29,17 @@ const addDays = (days: number) => {
 };
 
 async function main() {
-  const passwordAdmin = await bcrypt.hash("Admin@12345", 12);
-  const passwordMember = await bcrypt.hash("Member@12345", 12);
-
+  const passwordAdmin = await bcrypt.hash(seedPassword("SEED_ADMIN_PASSWORD", "Admin@12345"), 12);
   const group = await prisma.group.upsert({
     where: { id: "seed-group" },
     update: {
-      name: "FellowshipHub Bible Study",
-      description: "Weekly Bible study fellowship and ministry coordination."
+      name: "EGF Connect",
+      description: "Gather • Grow • Go — fellowship, spiritual growth, and Gospel mission."
     },
     create: {
       id: "seed-group",
-      name: "FellowshipHub Bible Study",
-      description: "Weekly Bible study fellowship and ministry coordination."
+      name: "EGF Connect",
+      description: "Gather • Grow • Go — fellowship, spiritual growth, and Gospel mission."
     }
   });
 
@@ -31,78 +47,37 @@ async function main() {
     where: { email: "admin@fellowshiphub.local" },
     update: {
       passwordHash: passwordAdmin,
-      name: "Grace Leader",
+      name: "Chinna Kadinti",
       role: "ADMIN",
-      phone: "555-0101",
-      area: "Northside",
-      phoneVisible: true,
+      phone: null,
+      area: null,
+      phoneVisible: false,
       groupId: group.id
     },
     create: {
       id: "seed-admin",
       email: "admin@fellowshiphub.local",
       passwordHash: passwordAdmin,
-      name: "Grace Leader",
+      name: "Chinna Kadinti",
       role: "ADMIN",
-      phone: "555-0101",
-      area: "Northside",
-      phoneVisible: true,
+      phoneVisible: false,
       groupId: group.id
     }
   });
 
-  const member = await prisma.user.upsert({
-    where: { email: "member@fellowshiphub.local" },
-    update: {
-      passwordHash: passwordMember,
-      name: "Daniel Member",
-      role: "MEMBER",
-      phone: "555-0102",
-      area: "East End",
-      phoneVisible: true,
-      groupId: group.id
-    },
-    create: {
-      id: "seed-member",
-      email: "member@fellowshiphub.local",
-      passwordHash: passwordMember,
-      name: "Daniel Member",
-      role: "MEMBER",
-      phone: "555-0102",
-      area: "East End",
-      phoneVisible: true,
-      groupId: group.id
+  await prisma.user.deleteMany({
+    where: {
+      role: "MEMBER"
     }
   });
-
-  const extraMembers = await Promise.all(
-    [
-      ["seed-member-2", "Miriam Thomas", "miriam@fellowshiphub.local", "West Park"],
-      ["seed-member-3", "Samuel Joseph", "samuel@fellowshiphub.local", "Downtown"],
-      ["seed-member-4", "Lydia Paul", "lydia@fellowshiphub.local", "South Ridge"]
-    ].map(([id, name, email, area]) =>
-      prisma.user.upsert({
-        where: { email },
-        update: { name, area, groupId: group.id, role: "MEMBER" },
-        create: {
-          id,
-          email,
-          passwordHash: passwordMember,
-          name,
-          area,
-          phone: "555-0199",
-          phoneVisible: false,
-          groupId: group.id
-        }
-      })
-    )
-  );
 
   const nextMeeting = await prisma.meeting.upsert({
     where: { id: "seed-meeting-next" },
     update: {
       title: "Abiding in Christ",
       date: addDays(3),
+      speakerName: "Chinna Kadinti",
+      worshipLeaderName: "",
       status: "PUBLISHED"
     },
     create: {
@@ -117,8 +92,8 @@ async function main() {
       address: "120 Fellowship Lane, Springfield",
       latitude: 39.799,
       longitude: -89.644,
-      speakerName: "Grace Leader",
-      worshipLeaderName: "Miriam Thomas",
+      speakerName: "Chinna Kadinti",
+      worshipLeaderName: "",
       biblePassage: "John 15:1-17",
       studyTopic: "Fruitfulness through abiding",
       discussionQuestions:
@@ -129,7 +104,12 @@ async function main() {
 
   const pastMeeting = await prisma.meeting.upsert({
     where: { id: "seed-meeting-past" },
-    update: { date: addDays(-7), status: "COMPLETED" },
+    update: {
+      date: addDays(-7),
+      speakerName: "Chinna Kadinti",
+      worshipLeaderName: "",
+      status: "COMPLETED"
+    },
     create: {
       id: "seed-meeting-past",
       groupId: group.id,
@@ -140,42 +120,14 @@ async function main() {
       endTime: "20:30",
       venueName: "Community Prayer Hall",
       address: "120 Fellowship Lane, Springfield",
-      speakerName: "Samuel Joseph",
-      worshipLeaderName: "Lydia Paul",
+      speakerName: "Chinna Kadinti",
+      worshipLeaderName: "",
       biblePassage: "James 2:14-26",
       studyTopic: "Active faith",
       discussionQuestions: "How does faith become visible? Where is our fellowship called to serve?",
       status: "COMPLETED"
     }
   });
-
-  await Promise.all([
-    prisma.rSVP.upsert({
-      where: { meetingId_userId: { meetingId: nextMeeting.id, userId: member.id } },
-      update: { status: "ATTENDING", arrivalStatus: "NOT_STARTED" },
-      create: { meetingId: nextMeeting.id, userId: member.id, status: "ATTENDING" }
-    }),
-    prisma.rSVP.upsert({
-      where: { meetingId_userId: { meetingId: nextMeeting.id, userId: extraMembers[0].id } },
-      update: { status: "MAYBE" },
-      create: { meetingId: nextMeeting.id, userId: extraMembers[0].id, status: "MAYBE" }
-    }),
-    prisma.rSVP.upsert({
-      where: { meetingId_userId: { meetingId: nextMeeting.id, userId: extraMembers[1].id } },
-      update: { status: "ATTENDING" },
-      create: { meetingId: nextMeeting.id, userId: extraMembers[1].id, status: "ATTENDING" }
-    }),
-    prisma.attendance.upsert({
-      where: { meetingId_userId: { meetingId: pastMeeting.id, userId: member.id } },
-      update: { status: "PRESENT", checkInTime: addDays(-7) },
-      create: { meetingId: pastMeeting.id, userId: member.id, status: "PRESENT", checkInTime: addDays(-7) }
-    }),
-    prisma.attendance.upsert({
-      where: { meetingId_userId: { meetingId: pastMeeting.id, userId: extraMembers[0].id } },
-      update: { status: "PRESENT", checkInTime: addDays(-7) },
-      create: { meetingId: pastMeeting.id, userId: extraMembers[0].id, status: "PRESENT", checkInTime: addDays(-7) }
-    })
-  ]);
 
   await Promise.all([
     prisma.announcement.upsert({
@@ -221,34 +173,6 @@ async function main() {
     })
   ]);
 
-  await Promise.all([
-    prisma.prayerRequest.upsert({
-      where: { id: "seed-prayer-1" },
-      update: {},
-      create: {
-        id: "seed-prayer-1",
-        title: "Healing for a family member",
-        description: "Please pray for recovery, comfort, and wisdom for the doctors.",
-        category: "HEALTH",
-        visibility: "PUBLIC",
-        createdById: member.id
-      }
-    }),
-    prisma.prayerRequest.upsert({
-      where: { id: "seed-prayer-2" },
-      update: {},
-      create: {
-        id: "seed-prayer-2",
-        title: "Thanksgiving for answered prayer",
-        description: "Grateful for a new job after several months of searching.",
-        category: "THANKSGIVING",
-        visibility: "PUBLIC",
-        status: "ANSWERED",
-        createdById: extraMembers[1].id
-      }
-    })
-  ]);
-
   const channels = await Promise.all(
     [
       ["General", "Group updates and everyday fellowship."],
@@ -271,7 +195,7 @@ async function main() {
       id: "seed-message-1",
       channelId: channels[0].id,
       authorId: admin.id,
-      content: "Welcome to FellowshipHub. Use these channels for study discussion and coordination."
+      content: "Welcome to EGF Connect. Gather • Grow • Go."
     }
   });
 
@@ -313,23 +237,17 @@ async function main() {
     )
   );
 
-  await Promise.all([
-    prisma.volunteerAssignment.upsert({
+  await prisma.volunteerAssignment.upsert({
       where: { meetingId_role: { meetingId: nextMeeting.id, role: "SPEAKER" } },
       update: { userId: admin.id },
       create: { meetingId: nextMeeting.id, userId: admin.id, role: "SPEAKER" }
-    }),
-    prisma.volunteerAssignment.upsert({
-      where: { meetingId_role: { meetingId: nextMeeting.id, role: "WORSHIP_LEADER" } },
-      update: { userId: extraMembers[0].id },
-      create: { meetingId: nextMeeting.id, userId: extraMembers[0].id, role: "WORSHIP_LEADER" }
-    }),
-    prisma.volunteerAssignment.upsert({
-      where: { meetingId_role: { meetingId: nextMeeting.id, role: "REFRESHMENTS" } },
-      update: { userId: extraMembers[2].id },
-      create: { meetingId: nextMeeting.id, userId: extraMembers[2].id, role: "REFRESHMENTS" }
-    })
-  ]);
+    });
+  await prisma.volunteerAssignment.deleteMany({
+    where: {
+      meetingId: nextMeeting.id,
+      role: { in: ["WORSHIP_LEADER", "REFRESHMENTS"] }
+    }
+  });
 }
 
 main()

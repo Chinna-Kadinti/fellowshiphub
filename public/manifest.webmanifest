@@ -1,7 +1,7 @@
 {
-  "name": "FellowshipHub",
-  "short_name": "FellowshipHub",
-  "description": "Bible study fellowship coordination for meetings, prayer, resources, and reading plans.",
+  "name": "EGF Connect",
+  "short_name": "EGF Connect",
+  "description": "Gather • Grow • Go — fellowship, spiritual growth, and Gospel mission.",
   "start_url": "/dashboard",
   "scope": "/",
   "display": "standalone",
@@ -10,10 +10,10 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/icons/icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "src": "/egf-connect.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }

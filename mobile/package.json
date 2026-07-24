@@ -1,0 +1,49 @@
+{
+  "name": "fellowshiphub-mobile",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b --pretty false",
+    "native:sync": "npm run build && cap sync && node scripts/normalize-ios-spm-paths.mjs",
+    "native:android": "npm run native:sync && cap open android",
+    "native:ios": "npm run native:sync && cap open ios",
+    "native:doctor": "cap doctor"
+  },
+  "dependencies": {
+    "@aparajita/capacitor-secure-storage": "8.0.0",
+    "@capacitor/app": "8.1.1",
+    "@capacitor/browser": "8.0.4",
+    "@capacitor/core": "8.4.2",
+    "@capacitor/keyboard": "8.0.5",
+    "@capacitor/network": "8.0.1",
+    "@capacitor/splash-screen": "8.0.2",
+    "@hookform/resolvers": "3.9.1",
+    "@tanstack/react-query": "5.101.4",
+    "lucide-react": "0.468.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-hook-form": "7.54.2",
+    "react-router-dom": "7.18.1",
+    "zod": "3.24.1"
+  },
+  "devDependencies": {
+    "@capacitor/android": "8.4.2",
+    "@capacitor/cli": "8.4.2",
+    "@capacitor/ios": "8.4.2",
+    "@types/react": "18.3.28",
+    "@types/react-dom": "18.3.7",
+    "@vitejs/plugin-react": "6.0.4",
+    "autoprefixer": "10.5.4",
+    "postcss": "8.5.22",
+    "tailwindcss": "3.4.19",
+    "typescript": "5.9.3",
+    "vite": "8.1.5"
+  }
+}

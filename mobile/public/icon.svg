@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">FellowshipHub</title>
+  <rect width="512" height="512" rx="112" fill="#1f7369"/>
+  <path d="M256 92c-58 0-105 47-105 105 0 25 9 48 24 66-39 25-65 69-65 119v21h292v-21c0-50-26-94-65-119 15-18 24-41 24-66 0-58-47-105-105-105Zm0 54a51 51 0 1 1 0 102 51 51 0 0 1 0-102Zm-88 203c13-38 47-65 88-65s75 27 88 65H168Z" fill="#fff"/>
+  <path d="M234 154h44v123h-44z" fill="#f3b95f"/>
+  <path d="M199 190h114v42H199z" fill="#f3b95f"/>
+</svg>

@@ -52,7 +52,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
         <CardTitle>{mode === "login" ? "Sign in" : "Create your account"}</CardTitle>
         <CardDescription>
           {mode === "login"
-            ? "Use your FellowshipHub account to continue."
+            ? "Use your EGF Connect account to continue."
             : "Register as a member of the fellowship."}
         </CardDescription>
       </CardHeader>

@@ -1,0 +1,68 @@
+"use client";
+
+import {
+  BookOpen,
+  CalendarDays,
+  ChartNoAxesCombined,
+  FileText,
+  HeartHandshake,
+  Home,
+  Megaphone,
+  MessageSquare,
+  Users
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
+
+export function NavigationLink({
+  href,
+  label,
+  mobile = false
+}: {
+  href: string;
+  label: string;
+  mobile?: boolean;
+}) {
+  const pathname = usePathname();
+  const linkRef = useRef<HTMLAnchorElement>(null);
+  const active = pathname === href || (href !== "/dashboard" && pathname.startsWith(`${href}/`));
+  const icons = {
+    Dashboard: Home,
+    Meetings: CalendarDays,
+    Announcements: Megaphone,
+    Resources: FileText,
+    Prayer: HeartHandshake,
+    Discussions: MessageSquare,
+    Reading: BookOpen,
+    Directory: Users,
+    Reports: ChartNoAxesCombined
+  };
+  const Icon = icons[label as keyof typeof icons] ?? Home;
+
+  useEffect(() => {
+    if (mobile && active) {
+      linkRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    }
+  }, [active, mobile]);
+
+  return (
+    <Link
+      ref={linkRef}
+      href={href}
+      prefetch={false}
+      aria-current={active ? "page" : undefined}
+      className={cn(
+        "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
+        mobile
+          ? "inline-flex shrink-0 border bg-card"
+          : "text-muted-foreground hover:bg-muted hover:text-foreground",
+        active && "border-primary/30 bg-primary text-primary-foreground shadow-sm hover:bg-primary hover:text-primary-foreground"
+      )}
+    >
+      <Icon className="h-4 w-4" aria-hidden="true" />
+      {label}
+    </Link>
+  );
+}
