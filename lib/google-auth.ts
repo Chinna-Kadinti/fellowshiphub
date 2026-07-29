@@ -30,7 +30,7 @@ function requestOrigin(request: NextRequest) {
 }
 
 export function publicAppOrigin(request: NextRequest) {
-  const configuredUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
+  const configuredUrl = process.env.APP_URL?.trim() || process.env.NEXT_PUBLIC_APP_URL?.trim();
   return configuredUrl ? new URL(configuredUrl).origin : requestOrigin(request);
 }
 
