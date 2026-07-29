@@ -115,7 +115,7 @@ https://your-deployed-domain.example/api/auth/google/callback
 
 Set `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in both local and deployment
 environments. The application detects the deployed HTTPS origin automatically.
-Set `APP_URL` to the canonical production origin when using a custom
+Set `NEXT_PUBLIC_APP_URL` to the canonical production origin when using a custom
 domain or a reverse proxy whose forwarded host is not the public domain.
 
 For HTTPS deployments, set:
