@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { AuthForm } from "@/components/forms/auth-form";
 
-export default function RegisterPage({ searchParams }: { searchParams: { error?: string } }) {
+export default function RegisterPage() {
   return (
     <main className="grid min-h-screen place-items-center px-4 py-10">
       <div className="mb-6 text-center">
@@ -9,7 +9,7 @@ export default function RegisterPage({ searchParams }: { searchParams: { error?:
         <h1 className="text-3xl font-semibold">Join EGF Connect</h1>
         <p className="mt-2 text-sm font-medium text-muted-foreground">Gather • Grow • Go</p>
       </div>
-      <AuthForm mode="register" oauthError={searchParams.error} />
+      <AuthForm mode="register" />
     </main>
   );
 }

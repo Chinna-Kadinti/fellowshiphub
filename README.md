@@ -37,14 +37,14 @@ Admin / Leader:
 
 ```text
 email: admin@fellowshiphub.local
-password: Admin@123456
+password: Admin@12345
 ```
 
 Member:
 
 ```text
 email: member@fellowshiphub.local
-password: Member@123456
+password: Member@12345
 ```
 
 ## Included MVP Features
@@ -103,20 +103,6 @@ npm run dev
 ## Environment
 
 Set a strong `JWT_SECRET` before deploying beyond local development. The bundled Docker Compose file uses a local-only default database password and app secret for convenience.
-
-To enable Google sign-in, create an OAuth 2.0 Web application in Google Cloud.
-Add the local callback and the callback for every deployed domain as authorized
-redirect URIs:
-
-```text
-http://localhost:3000/api/auth/google/callback
-https://your-deployed-domain.example/api/auth/google/callback
-```
-
-Set `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in both local and deployment
-environments. The application detects the deployed HTTPS origin automatically.
-Set `NEXT_PUBLIC_APP_URL` to the canonical production origin when using a custom
-domain or a reverse proxy whose forwarded host is not the public domain.
 
 For HTTPS deployments, set:
 

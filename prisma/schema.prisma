@@ -88,7 +88,6 @@ enum VolunteerRole {
 model User {
   id                       String                    @id @default(cuid())
   email                    String                    @unique
-  googleId                 String?                   @unique
   passwordHash             String
   name                     String
   role                     UserRole                  @default(MEMBER)
