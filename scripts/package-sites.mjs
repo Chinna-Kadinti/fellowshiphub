@@ -14,7 +14,11 @@ const requireShim =
   'const require = createNodeRequire("/worker/index.js");\n';
 const handlerSource = readFileSync(handlerPath, "utf8");
 if (!handlerSource.includes('const require = createNodeRequire("/worker/index.js")')) {
-  writeFileSync(handlerPath, requireShim + handlerSource);
+  const workerCompatibleHandler = handlerSource.replace(
+    'function setNextjsServerWorkingDirectory(){process.chdir("")}',
+    "function setNextjsServerWorkingDirectory(){}"
+  );
+  writeFileSync(handlerPath, requireShim + workerCompatibleHandler);
 }
 
 if (existsSync(".openai/hosting.json")) {
