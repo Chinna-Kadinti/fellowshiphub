@@ -3,6 +3,7 @@ node_modules/
 
 # next.js
 .next/
+.next-dev/
 .next-stale-*/
 .open-next/
 out/

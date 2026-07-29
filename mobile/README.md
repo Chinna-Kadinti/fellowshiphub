@@ -38,7 +38,7 @@ of the FellowshipHub backend is required.
 
 The current free production deployment is available at:
 
-- Mobile PWA: `https://fellowshiphub-mobile.vercel.app`
+- Mobile PWA: `https://egf-connect.vercel.app`
 - Next.js API/web application: `https://fellowshiphub-two.vercel.app`
 
 On Android, open the mobile URL in Chrome and tap the in-app **Install app**

@@ -3,6 +3,7 @@ build
 dist
 out
 .next
+.next-stale-*
 .env*
 *.log
 *.err

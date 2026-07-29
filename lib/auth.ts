@@ -81,7 +81,7 @@ export function setSessionCookie(token: string) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "";
   const secureCookie = process.env.COOKIE_SECURE
     ? process.env.COOKIE_SECURE === "true"
-    : appUrl.startsWith("https://");
+    : appUrl ? appUrl.startsWith("https://") : process.env.NODE_ENV === "production";
 
   cookies().set(COOKIE_NAME, token, {
     httpOnly: true,
