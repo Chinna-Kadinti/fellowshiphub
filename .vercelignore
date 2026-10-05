@@ -3,6 +3,11 @@ build
 dist
 out
 .next
+.next-stale
+.next-dev-stale
+.open-next
+.git
+.openai
 .env*
 *.log
 *.err

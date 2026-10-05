@@ -54,14 +54,14 @@ export function NavigationLink({
       prefetch={false}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
+        "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
         mobile
           ? "inline-flex shrink-0 border bg-card"
-          : "text-muted-foreground hover:bg-muted hover:text-foreground",
-        active && "border-primary/30 bg-primary text-primary-foreground shadow-sm hover:bg-primary hover:text-primary-foreground"
+          : "text-muted-foreground hover:translate-x-0.5 hover:bg-primary/5 hover:text-primary",
+        active && "border-primary/30 bg-primary text-primary-foreground shadow-[0_12px_24px_-14px_hsl(var(--primary))] hover:bg-primary hover:text-primary-foreground"
       )}
     >
-      <Icon className="h-4 w-4" aria-hidden="true" />
+      <Icon className="h-4 w-4 transition-transform group-hover:scale-110" aria-hidden="true" />
       {label}
     </Link>
   );

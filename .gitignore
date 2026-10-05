@@ -4,6 +4,8 @@ node_modules/
 # next.js
 .next/
 .next-stale-*/
+.next-stale/
+.next-dev-stale/
 .open-next/
 out/
 

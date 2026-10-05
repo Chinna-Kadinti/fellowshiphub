@@ -104,10 +104,24 @@ npm run dev
 
 Set a strong `JWT_SECRET` before deploying beyond local development. The bundled Docker Compose file uses a local-only default database password and app secret for convenience.
 
+To enable Google authentication, create an OAuth 2.0 Web application in Google
+Cloud and configure these authorized redirect URIs:
+
+```text
+http://localhost:3000/api/auth/google/callback
+https://your-domain.example/api/auth/google/callback
+```
+
+Set `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `APP_URL` in the application
+environment. `APP_URL` must be the public origin, such as
+`https://your-domain.example`. A verified Google user is registered
+automatically on first use and signed in on subsequent uses.
+
 For HTTPS deployments, set:
 
 ```bash
 COOKIE_SECURE=true
+APP_URL=https://your-domain.example
 NEXT_PUBLIC_APP_URL=https://your-domain.example
 MOBILE_ALLOWED_ORIGINS=capacitor://localhost,https://localhost
 SEED_DATABASE=false

@@ -1,5 +1,7 @@
-const CACHE_NAME = "egf-connect-v4";
-const APP_SHELL = ["/", "/login", "/manifest.webmanifest", "/egf-connect.png"];
+const CACHE_NAME = "egf-connect-v5";
+// Never precache Next.js documents. Their generated CSS filenames change between
+// deployments, so an old HTML document can render as an unstyled page.
+const APP_SHELL = ["/manifest.webmanifest", "/egf-connect.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)));
@@ -34,7 +36,7 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (request.mode === "navigate") {
-    event.respondWith(fetch(request).catch(() => caches.match("/login")));
+    event.respondWith(fetch(request));
     return;
   }
 
@@ -47,6 +49,6 @@ self.addEventListener("fetch", (event) => {
         }
         return response;
       })
-      .catch(() => caches.match(request).then((cached) => cached || caches.match("/login")))
+      .catch(() => caches.match(request))
   );
 });
